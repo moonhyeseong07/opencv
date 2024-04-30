@@ -1,46 +1,26 @@
-import cv2
+import cv2 
 import numpy as np
+from matplotlib import pyplot as plt
 
-CAMERA_ID = 0
-cam = cv2.VideoCapture(CAMERA_ID)
+img1 = cv2.imread("img8.jpg",cv2.IMREAD_GRAYSCALE)
 
-if not cam.isOpened():
-    print('Cannot open the camera-%d' % (CAMERA_ID))
-    exit()
+ksize1 = 3; ksize2 = 5; ksize3 = 7; ksize4 = 9
+kernel = np.full(shape=[ksize4,ksize4],fill_value=1, dtype=np.float32)/(ksize4*ksize4)
+res1 = cv2.blur(img1, (ksize1,ksize1))
+res2 = cv2.blur(img1, (ksize1,ksize2)) 
+res3 = cv2.boxFilter(img1, -1,(ksize3,ksize3)) 
+res4 = cv2.filter2D(img1,-1,kernel) 
+res5 = cv2.boxFilter(img1, -1,(1,21)) 
 
-cv2.namedWindow('CAM Window')
+ress=[]
+ress.append(img1), ress.append(res1), ress.append(res2)
+ress.append(res3), ress.append(res4), ress.append(res5)
 
-background = False
-binary_mode = False
+titles=['input','res1','res2','res3','res4','res5']
 
-while True:
-    ret, frame = cam.read()
-
-    if not ret:
-        break
-    cv2.imshow('CAM Window', frame)
-    key = cv2.waitKey(33)
-
-    if key == ord('a'):
-        # 배경 영상 촬영
-        background= cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        a = True
-
-    elif key == ord('b'):
-        # 이진화 모드 전환
-        binary_mode = not binary_mode
-
-    elif key == ord('q'):
-        break
-
-    if binary_mode and background is not None:
-        # 차영상 계산
-        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        diff = cv2.absdiff(gray_frame, background)
-        
-        # 이진화
-        _, binary_diff = cv2.threshold(diff, 30, 255, cv2.THRESH_BINARY)
-        cv2.imshow("Binary Difference", binary_diff)
-
-cam.release()
-cv2.destroyAllWindows()
+for i in range(6):
+    plt.subplot(2,3,i+1)
+    plt.imshow(ress[i],cmap='gray')
+    plt.title(titles[i])
+    plt.xticks([]),plt.yticks([])
+plt.show()
