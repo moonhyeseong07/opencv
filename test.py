@@ -12,7 +12,7 @@ res3 = cv2.boxFilter(img1, -1,(ksize3,ksize3))
 res4 = cv2.filter2D(img1,-1,kernel) 
 res5 = cv2.boxFilter(img1, -1,(1,21)) 
 
-ress=[]
+ress = []
 ress.append(img1), ress.append(res1), ress.append(res2)
 ress.append(res3), ress.append(res4), ress.append(res5)
 
