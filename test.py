@@ -1,27 +1,38 @@
-import cv2 
+import cv2
 import numpy as np
-from matplotlib import pyplot as plt
 
-img1 = cv2.imread("img8.jpg",cv2.IMREAD_GRAYSCALE)
+def apply_filter(frame, kernel_size):
+    kernel = np.ones((kernel_size, kernel_size), np.float32) / (kernel_size * kernel_size)
+    filtered_frame = cv2.filter2D(frame, -1, kernel)
+    return filtered_frame
 
-ksize1 = 3; ksize2 = 5; ksize3 = 7; ksize4 = 9
-kernel = np.full(shape=[ksize4,ksize4],fill_value=1, dtype=np.float32)/(ksize4*ksize4)
-res1 = cv2.blur(img1, (ksize1,ksize1))
-res2 = cv2.blur(img1, (ksize1,ksize2)) 
-res3 = cv2.boxFilter(img1, -1,(ksize3,ksize3)) 
-res4 = cv2.filter2D(img1,-1,kernel) 
-res5 = cv2.boxFilter(img1, -1,(1,21)) 
+def on_trackbar_change(val):
+    global filter_size, frame
+    filter_size = val
+    filtered_frame = apply_filter(frame, filter_size)
+    cv2.imshow('Filtered Frame', filtered_frame)
 
-ress = []
-ress.append(img1), ress.append(res1), ress.append(res2)
-ress.append(res3), ress.append(res4), ress.append(res5)
+CAMERA_ID = 0
+cam = cv2.VideoCapture(CAMERA_ID)
+if not cam.isOpened():
+    print('Cannot open the camera-%d' % (CAMERA_ID))
+    exit()
 
-titles=['input','res1','res2','res3','res4','res5']
+cv2.namedWindow('CAM Window')
 
-for i in range(6):
-    plt.subplot(2,3,i+1)
-    plt.imshow(ress[i],cmap='gray')
-    plt.title(titles[i])
-    plt.xticks([]),plt.yticks([])
-    
-plt.show()
+filter_size = 1  
+ret, frame = cam.read()  
+
+
+cv2.createTrackbar('Filter Size', 'CAM Window', filter_size, 20, on_trackbar_change)
+
+while True:
+    cv2.imshow('CAM Window', frame)
+    key = cv2.waitKey(1) & 0xFF
+    if key == ord('q'):
+        break
+
+    ret, frame = cam.read() 
+
+cam.release()
+cv2.destroyAllWindows()
