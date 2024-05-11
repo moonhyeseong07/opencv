@@ -27,12 +27,12 @@ ret, frame = cam.read()
 cv2.createTrackbar('Filter Size', 'CAM Window', filter_size, 20, on_trackbar_change)
 
 while True:
-    cv2.imshow('CAM Window', frame)
+    cv2.imshow('CAM Window',frame)
     key = cv2.waitKey(1) & 0xFF
     if key == ord('q'):
         break
 
-    ret, frame = cam.read() 
+    ret,frame = cam.read() 
 
 cam.release()
 cv2.destroyAllWindows()
