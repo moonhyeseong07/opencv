@@ -21,6 +21,7 @@ background[:round(h*scale_y),:round(w*scale_x)]=res4;
 res4=background
 user_mat3=np.float32([[0.4,0,100],[0,0.6,50]])
 res5 = cv2.warpAffine(img1,user_mat3,(w,h))
+
 ress=[]
 ress.append(img1),ress.append(res1),ress.append(res2)
 ress.append(res3),ress.append(res4),ress.append(res5)
