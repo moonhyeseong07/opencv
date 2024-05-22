@@ -5,6 +5,7 @@ img1=cv2.imread("img11.jpg",cv2.IMREAD_GRAYSCALE)
 
 h,w, = img1.shape
 tlans_x=10; tlans_y = 25
+
 point1_src=np.float32([[15,20],[50,70],[130,140]])
 point1_dst=np.float32(point1_src+[tlans_x,tlans_y])
 affine_mat1=cv2.getAffineTransform(point1_src,point1_dst)
@@ -29,6 +30,7 @@ res5 = cv2.warpAffine(img1,user_mat3,(w,h))
 ress=[]
 ress.append(img1),ress.append(res1),ress.append(res2)
 ress.append(res3),ress.append(res4),ress.append(res5)
+
 titles=['input','res1','res2','res3','res4','res5']
 
 for i in range(6):
