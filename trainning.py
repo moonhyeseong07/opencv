@@ -44,5 +44,6 @@ if len(points) == 4:
 
     plt.imshow(transformed_image)
     plt.show()
+
 else:
     print("4개의 점을 모두 클릭하지 않았습니다.")
