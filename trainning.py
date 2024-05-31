@@ -14,6 +14,7 @@ def onclick(event):
 
 image_path = 'img13.jpg'
 image = cv2.imread(image_path)
+
 if image is None:
     raise FileNotFoundError(f"Image file not found at {image_path}")
 
