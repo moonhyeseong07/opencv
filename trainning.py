@@ -13,6 +13,7 @@ def onclick(event):
             plt.close()
 
 image_path = 'img13.jpg'
+
 image = cv2.imread(image_path)
 
 if image is None:
