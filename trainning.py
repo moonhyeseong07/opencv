@@ -1,51 +1,51 @@
-import cv2
-import matplotlib.pyplot as plt
 import numpy as np
+import cv2
+from matplotlib import pyplot as plt
 
-points = []
+img1_src=cv2.imread("img_6_3.png",cv2.IMREAD_GRAYSCALE)
+img2_src=cv2.imread("img_6_0.png",cv2.IMREAD_GRAYSCALE)
 
-def onclick(event):
-    if len(points) < 4:
-        points.append((event.xdata, event.ydata))
-        plt.plot(event.xdata, event.ydata, 'ro')
-        plt.draw()
-        if len(points) == 4:
-            plt.close()
+img1=cv2.resize(img1_src,(320,240))
+img2=cv2.resize(img2_src,(320,240))
 
-image_path = 'img13.jpg'
+img1_edge=cv2.Canny(img1,50,150,apertureSize=3)
+lines=cv2.HoughLines(img1_edge,2,np.pi/180,100)
+linesP=cv2.HoughLinesP(img1_edge,2,np.pi/180,50,minLineLength=1,maxLineGap=100)
 
-image = cv2.imread(image_path)
+circles=cv2.HoughCircles(img2,cv2.HOUGH_GRADIENT,1,20,param1=50,param2=20,minRadius=30,maxRadius=50)
 
-if image is None:
-    raise FileNotFoundError(f"Image file not found at {image_path}")
+img1_color1=cv2.cvtColor(img1,cv2.COLOR_GRAY2BGR)
+if lines.any()!=None:
+    for line in lines:
+        rho,theta=line[0]
+        a=np.cos(theta); b=np.sin(theta)
+        x0=a*rho; y0=b*rho
+        x1=int(x0+1000*(-b)); y1=int(y0+1000*a)
+        x2=int(x0-1000*(-b)); y2=int(y0-1000*a)
+        cv2.line(img1_color1,(x1,y1),(x2,y2),(0,0,255),2)
+img1_color2=cv2.cvtColor(img1,cv2.COLOR_GRAY2BGR)
+if linesP.any()!=None:
+    for line in linesP:
+        x1,y1,x2,y2=line[0]
+        cv2.line(img1_color2,(x1,y1),(x2,y2),(0,255,0),2)
 
-image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+circles=np.uint16(np.around(circles))
+img2_color1=cv2.cvtColor(img2,cv2.COLOR_GRAY2BGR)
+if circles.any()!=None:
+    for i in circles[0,:]:
+        cv2.circle(img2_color1,(i[0],i[1]),i[2],(0,0,255),2)
 
-fig, ax = plt.subplots()
-ax.imshow(image)
+ress=[]
+ress.append(img1), ress.append(img2), ress.append(img1_edge)
+ress.append(img1_color1), ress.append(img1_color2)
+ress.append(img2_color1)
 
-cid = fig.canvas.mpl_connect('button_press_event', onclick)
+titles=["img1","img2","canny edge", "HoughLines", "HoughLinesP", "HoughCircles", "HoughCircles"]
+
+for i in range(6):
+    plt.subplot(2,3,i+1)
+    plt.imshow(ress[i],cmap='gray')
+    plt.title([titles[i]])
+    plt.xticks([]), plt.yticks([])
 
 plt.show()
-
-if len(points) == 4:
-    src_points = np.array(points, dtype=np.float32)
-
-    width = max(int(np.linalg.norm(src_points[0] - src_points[3])), int(np.linalg.norm(src_points[1] - src_points[2])))
-    height = max(int(np.linalg.norm(src_points[0] - src_points[1])), int(np.linalg.norm(src_points[3] - src_points[2])))
-
-    dst_points = np.array([
-        [0, height],
-        [0, 0],
-        [width, 0],
-        [width, height]
-    ], dtype=np.float32)
-
-    matrix = cv2.getPerspectiveTransform(src_points, dst_points)
-    transformed_image = cv2.warpPerspective(image, matrix, (width, height))
-
-    plt.imshow(transformed_image)
-    plt.show()
-
-else:
-    print("4개의 점을 모두 클릭하지 않았습니다.")
