@@ -15,6 +15,7 @@ linesP=cv2.HoughLinesP(img1_edge,2,np.pi/180,50,minLineLength=1,maxLineGap=100)
 circles=cv2.HoughCircles(img2,cv2.HOUGH_GRADIENT,1,20,param1=50,param2=20,minRadius=30,maxRadius=50)
 
 img1_color1=cv2.cvtColor(img1,cv2.COLOR_GRAY2BGR)
+
 if lines.any()!=None:
     for line in lines:
         rho,theta=line[0]
