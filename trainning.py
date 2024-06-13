@@ -25,6 +25,7 @@ if lines.any()!=None:
         x2=int(x0-1000*(-b)); y2=int(y0-1000*a)
         cv2.line(img1_color1,(x1,y1),(x2,y2),(0,0,255),2)
 img1_color2=cv2.cvtColor(img1,cv2.COLOR_GRAY2BGR)
+
 if linesP.any()!=None:
     for line in linesP:
         x1,y1,x2,y2=line[0]
