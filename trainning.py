@@ -30,8 +30,8 @@ if linesP.any()!=None:
     for line in linesP:
         x1,y1,x2,y2=line[0]
         cv2.line(img1_color2,(x1,y1),(x2,y2),(0,255,0),2)
-
 circles=np.uint16(np.around(circles))
+
 img2_color1=cv2.cvtColor(img2,cv2.COLOR_GRAY2BGR)
 
 if circles.any()!=None:
