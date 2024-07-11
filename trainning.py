@@ -11,6 +11,7 @@ res1 = cv2.cvtColor(img1, cv2.COLOR_GRAY2BGR)
 
 for (x,y,w,h) in faces:
     cv2.rectangle(res1, (x,y), (x+w, y+h), (255, 0, 0), 2)
+    
 displays = [("input1",img1),
             ("res1", res1)]
 
