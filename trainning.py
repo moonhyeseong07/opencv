@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 
-img1_src = cv2.imread("img_6_6.jpg",cv2.IMREAD_GRAYSCALE)
+img1_src = cv2.imread("img6.jpg",cv2.IMREAD_GRAYSCALE)
 img1 = cv2.resize(img1_src, (320,240))
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
